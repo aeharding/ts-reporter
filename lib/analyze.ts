@@ -50,6 +50,8 @@ export default async function analyze(existingStats: Stats, options: Options) {
     currentGitRef = await git.getRef();
   }
 
+  const currentCommit = await git.getHEADSha();
+
   let statsPerDay = [];
   for (let i = 0; i < days.length; i++) {
     if (interrupt) throw new Error("interrupt");
@@ -58,7 +60,7 @@ export default async function analyze(existingStats: Stats, options: Options) {
 
     statsPerDay.push({
       date: date.toISOString(),
-      stats: await getStatsPerDay(date, options),
+      stats: await getStatsPerDay(date, currentCommit, options),
     });
   }
 
@@ -76,17 +78,19 @@ export function sortStats(a: StatItem, b: StatItem): number {
   return new Date(a.date).getTime() - new Date(b.date).getTime();
 }
 
-async function getStatsPerDay(day: Date, options: Options) {
+async function getStatsPerDay(
+  day: Date,
+  currentCommit: string,
+  options: Options
+) {
   console.log("Running for date:", day);
-
-  const mainBranch = await git.getMainBranch();
 
   const { stdout: revision } = await execa("git", [
     "rev-list",
     "-1",
     "--before",
     day.toISOString(),
-    mainBranch,
+    currentCommit,
   ]);
 
   if (!revision) throw new Error("Revision not found!");

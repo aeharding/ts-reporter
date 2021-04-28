@@ -1,6 +1,6 @@
 {
   "name": "ts-reporter",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "Track typescript conversion velocity for your big projects",
   "main": "index.js",
   "author": "Alexander Harding <2166114+aeharding@users.noreply.github.com>",
@@ -14,7 +14,8 @@
     "watch": "watch 'yarn build' lib"
   },
   "files": [
-    "dist"
+    "dist",
+    "assets"
   ],
   "bin": {
     "ts-reporter": "./dist/cli.js"

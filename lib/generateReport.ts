@@ -103,7 +103,20 @@ export default async function generateReport(
     },
   };
 
-  const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+  const chartJSNodeCanvas = new ChartJSNodeCanvas({
+    width,
+    height,
+    chartCallback: (ChartJS) => {
+      ChartJS.defaults.global.defaultFontFamily = "lato";
+    },
+  });
+
+  chartJSNodeCanvas.registerFont(
+    path.resolve(__dirname, "../assets/Lato-Bold.ttf"),
+    {
+      family: "lato",
+    }
+  );
 
   const image = await chartJSNodeCanvas.renderToBuffer(chartConfig);
 

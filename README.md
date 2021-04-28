@@ -80,10 +80,8 @@ PRs welcome for documentation!
 
 ## FAQ
 
-## Why is my CI failing?
+### Why is my CI failing to `npm install`?
 
 If your build agent is using node v16, you might need to use node v15. [node-canvas](https://github.com/Automattic/node-canvas) doesn't support prebuilts of node v16 as of the time of this writing.
 
-```
-npm ERR! node-pre-gyp WARN Pre-built binaries not found for canvas@2.7.0 and node@16.0.0 (node-v93 ABI, glibc) (falling back to source compile with node-gyp)
-```
+> npm ERR! node-pre-gyp WARN Pre-built binaries not found for canvas@2.7.0 and node@16.0.0 (node-v93 ABI, glibc) (falling back to source compile with node-gyp)

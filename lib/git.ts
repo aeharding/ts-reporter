@@ -23,11 +23,8 @@ export async function isClean() {
   return !stdout.trim();
 }
 
-export async function getMainBranch() {
-  const { stdout } = await execa("git", [
-    "symbolic-ref",
-    "refs/remotes/origin/HEAD",
-  ]);
+export async function getHEADSha() {
+  const { stdout } = await execa("git", ["rev-parse", "HEAD"]);
 
-  return stdout.replace("refs/remotes/origin/", "");
+  return stdout;
 }
