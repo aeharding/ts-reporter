@@ -7,19 +7,42 @@ Migrating your huge app from Javascript to Typescript? This project provides a b
 
 ![Example burndown chart from a large project](example.png)
 
-## Run Manually
+## Install in project
 
-1.  Install:
+```sh
+yarn add ts-reporter --dev
+# or
+npm i ts-reporter --save-dev
+```
+
+`package.json`:
+
+```json
+{
+  "scripts": {
+    "build-ts-reporter": "ts-reporter build src/"
+  }
+}
+```
+
+3. Run
+
+```sh
+npm run build-ts-reporter
+# or
+yarn build-ts-reporter
+
+# or directly, without adding to package.json:
+npx ts-reporter build src/
+```
+
+## Install globally
 
 ```sh
 yarn global add ts-reporter
 # or
 npm i --global ts-reporter
 ```
-
-2.  **IMPORTANT** Clean your git repo of current work. `ts-reporter` needs to checkout old code to analyze your past progress.
-
-3.  Run:
 
 ```sh
 ts-reporter build src/
@@ -29,7 +52,27 @@ ts-reporter build src/
 
 ### Azure Devops
 
-(todo)
+Install ts-reporter:
+
+```sh
+yarn add --dev ts-reporter
+#or
+npm i --save-dev ts-reporter
+```
+
+Add to `azure-pipelines.yml`:
+
+```yml
+# [...]
+    - script: |
+        npx ts-reporter build src
+    displayName: Run ts-reporter
+    - task: PublishPipelineArtifact@1
+    inputs:
+        targetPath: $(System.DefaultWorkingDirectory)/report
+        artifactName: report
+# [...]
+```
 
 ### Something else?
 
