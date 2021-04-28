@@ -1,6 +1,6 @@
 {
   "name": "ts-reporter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Track typescript conversion velocity for your big projects",
   "main": "index.js",
   "author": "Alexander Harding <2166114+aeharding@users.noreply.github.com>",
