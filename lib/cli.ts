@@ -34,12 +34,14 @@ yargs(hideBin(process.argv))
     description: "First day (start bound) of analysis",
     default: subDays(new Date(), 90).toISOString().slice(0, 10),
   })
+  .alias("start", "from")
   .option("end", {
     alias: "e",
     type: "string",
     description: "Last day (end bound) of analysis",
     default: new Date().toISOString().slice(0, 10),
   })
+  .alias("end", "to")
   .command(
     "build [path]",
     "generate the output artifacts",
