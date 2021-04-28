@@ -1,4 +1,5 @@
 {
+  "name": "ts-reporter",
   "version": "0.0.1",
   "description": "Track typescript conversion velocity for your big projects",
   "main": "index.js",
