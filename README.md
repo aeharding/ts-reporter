@@ -4,6 +4,7 @@ Migrating your huge app from Javascript to Typescript? This project provides a b
 
 - See the progress that you're making instead of feeling like you're getting nowhere. 💪
 - Easily integrate as an artifact of your CI
+- 🌌 Dark mode! `--dark`
 
 ![Example burndown chart from a large project](example.png)
 
@@ -64,13 +65,23 @@ Add to `azure-pipelines.yml`:
 
 ```yml
 # [...]
+
+- job: ts_reporter
+  container: node:15
+  steps:
+    - checkout: self
+      fetchDepth: 1000
     - script: |
+        npm ci
+      displayName: Install
+    - script: |
+        git checkout -- .
         npx ts-reporter build src
-    displayName: Run ts-reporter
+      displayName: Run ts-reporter
     - task: PublishPipelineArtifact@1
     inputs:
-        targetPath: $(System.DefaultWorkingDirectory)/report
-        artifactName: report
+        targetPath: $(System.DefaultWorkingDirectory)/reports
+        artifactName: reports
 # [...]
 ```
 
