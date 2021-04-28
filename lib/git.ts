@@ -22,3 +22,12 @@ export async function isClean() {
 
   return !stdout.trim();
 }
+
+export async function getMainBranch() {
+  const { stdout } = await execa("git", [
+    "symbolic-ref",
+    "refs/remotes/origin/HEAD",
+  ]);
+
+  return stdout.replace("refs/remotes/origin/", "");
+}

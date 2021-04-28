@@ -79,12 +79,14 @@ export function sortStats(a: StatItem, b: StatItem): number {
 async function getStatsPerDay(day: Date, options: Options) {
   console.log("Running for date:", day);
 
+  const mainBranch = await git.getMainBranch();
+
   const { stdout: revision } = await execa("git", [
     "rev-list",
     "-1",
     "--before",
     day.toISOString(),
-    "master",
+    mainBranch,
   ]);
 
   if (!revision) throw new Error("Revision not found!");
