@@ -18,8 +18,9 @@ run(async () => {
   assert.deepStrictEqual(result, expected);
 
   assert.strictEqual(
-    (await execa("md5", ["-q", `${DIR}/reports/ts-migration/image.png`]))
-      .stdout,
-    fse.readFileSync(`${__dirname}/image.png.md5`).toString()
+    (
+      await execa("shasum", [`${DIR}/reports/ts-migration/image.png`])
+    ).stdout.split(" ")[0],
+    fse.readFileSync(`${__dirname}/image.png.shasum`).toString()
   );
 });
