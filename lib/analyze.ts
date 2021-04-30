@@ -1,7 +1,7 @@
 import execa from "execa";
 import glob from "glob-promise";
 import chalk from "chalk";
-import { eachDayOfInterval, isEqual } from "date-fns";
+import { eachDayOfInterval, format, isEqual, parse } from "date-fns";
 import * as fs from "fs/promises";
 import sloc from "sloc";
 import * as git from "./git";
@@ -24,9 +24,9 @@ process.on("SIGINT", async () => {
 
 export default async function analyze(existingStats: Stats, options: Options) {
   let days = eachDayOfInterval({
-    start: new Date(options.start),
-    end: new Date(options.end),
-  }).map((d) => new Date(d.toISOString().slice(0, 10))); // always use GMT
+    start: parse(options.start, "yyyy-LL-dd", new Date()),
+    end: parse(options.end, "yyyy-LL-dd", new Date()),
+  }).map((d) => new Date(format(d, "yyyy-LL-dd"))); // always use GMT
 
   const relevantExistingStats = existingStats.filter(({ date }) =>
     days.find((day) => isEqual(day, new Date(date)))

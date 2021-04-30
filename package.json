@@ -12,7 +12,7 @@
     "check-types": "tsc --noEmit",
     "check-formatting": "prettier --check '**/*.{js,json,css,md,scss,tsx,ts}'",
     "watch": "watch 'yarn build' lib",
-    "test": "./test.sh"
+    "test": "TZ=UTC ./test.sh"
   },
   "files": [
     "dist",
