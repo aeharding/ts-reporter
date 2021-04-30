@@ -14,5 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn install
+      - run: git config --global user.email "you@example.com"
+      - run: git config --global user.name "Your Name"
       - run: yarn build
+      - run: yarn link
       - run: yarn test
