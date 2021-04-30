@@ -52,15 +52,28 @@ export default async function analyze(existingStats: Stats, options: Options) {
 
   const currentCommit = await git.getHEADSha();
 
-  let statsPerDay = [];
+  let statsPerDay: Stats = [];
   for (let i = 0; i < days.length; i++) {
     if (interrupt) throw new Error("interrupt");
 
     const date = days[i];
 
+    let stats: { js: Stat; ts: Stat };
+
+    try {
+      stats = await getStatsPerDay(date, currentCommit, options);
+    } catch (e) {
+      if (e.message !== "not found") throw e;
+
+      stats = {
+        js: emptyStat(),
+        ts: emptyStat(),
+      };
+    }
+
     statsPerDay.push({
       date: date.toISOString(),
-      stats: await getStatsPerDay(date, currentCommit, options),
+      stats,
     });
   }
 
@@ -93,9 +106,9 @@ async function getStatsPerDay(
     currentCommit,
   ]);
 
-  if (!revision) throw new Error("Revision not found!");
+  if (!revision) throw new Error("not found");
 
-  await execa("git", ["checkout", revision]);
+  await git.checkout(revision);
 
   const js = await getStatsFor("js", options);
   const ts = await getStatsFor("ts", options);
@@ -118,17 +131,7 @@ async function getStatsFor(type: "js" | "ts", options: Options): Promise<Stat> {
   const statsPerFile = fileContents.map((f) => sloc(f.toString(), type));
 
   const stats = !statsPerFile.length
-    ? {
-        total: 0,
-        source: 0,
-        comment: 0,
-        single: 0,
-        block: 0,
-        mixed: 0,
-        blockEmpty: 0,
-        empty: 0,
-        todo: 0,
-      }
+    ? emptyStat()
     : statsPerFile.reduce((acc, currentValue) => {
         Object.keys(acc).forEach((_k) => {
           const k = _k as sloc.Key;
@@ -139,4 +142,18 @@ async function getStatsFor(type: "js" | "ts", options: Options): Promise<Stat> {
       });
 
   return stats;
+}
+
+function emptyStat(): Stat {
+  return {
+    total: 0,
+    source: 0,
+    comment: 0,
+    single: 0,
+    block: 0,
+    mixed: 0,
+    blockEmpty: 0,
+    empty: 0,
+    todo: 0,
+  };
 }

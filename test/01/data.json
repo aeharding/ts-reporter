@@ -1,0 +1,87 @@
+{
+  "data": [
+    {
+      "date": "2020-12-31T06:00:00.000Z",
+      "stats": {
+        "js": {
+          "total": 0,
+          "source": 0,
+          "comment": 0,
+          "single": 0,
+          "block": 0,
+          "mixed": 0,
+          "blockEmpty": 0,
+          "empty": 0,
+          "todo": 0
+        },
+        "ts": {
+          "total": 0,
+          "source": 0,
+          "comment": 0,
+          "single": 0,
+          "block": 0,
+          "mixed": 0,
+          "blockEmpty": 0,
+          "empty": 0,
+          "todo": 0
+        }
+      }
+    },
+    {
+      "date": "2021-01-01T06:00:00.000Z",
+      "stats": {
+        "js": {
+          "total": 0,
+          "source": 0,
+          "comment": 0,
+          "single": 0,
+          "block": 0,
+          "mixed": 0,
+          "blockEmpty": 0,
+          "empty": 0,
+          "todo": 0
+        },
+        "ts": {
+          "total": 0,
+          "source": 0,
+          "comment": 0,
+          "single": 0,
+          "block": 0,
+          "mixed": 0,
+          "blockEmpty": 0,
+          "empty": 0,
+          "todo": 0
+        }
+      }
+    },
+    {
+      "date": "2021-01-02T06:00:00.000Z",
+      "stats": {
+        "js": {
+          "total": 1,
+          "source": 1,
+          "comment": 0,
+          "single": 0,
+          "block": 0,
+          "mixed": 0,
+          "empty": 0,
+          "todo": 0,
+          "blockEmpty": 0
+        },
+        "ts": {
+          "total": 0,
+          "source": 0,
+          "comment": 0,
+          "single": 0,
+          "block": 0,
+          "mixed": 0,
+          "blockEmpty": 0,
+          "empty": 0,
+          "todo": 0
+        }
+      }
+    }
+  ],
+  "path": "/Users/aeharding/ts-reporter/temp/2021-04-28_12:08:14/0",
+  "version": "0.0.8"
+}

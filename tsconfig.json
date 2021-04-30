@@ -11,5 +11,6 @@
     "noFallthroughCasesInSwitch": true,
     "outDir": "./dist",
     "lib": ["ES2015", "DOM"]
-  }
+  },
+  "exclude": ["test/**", "temp/**"]
 }
