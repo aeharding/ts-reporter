@@ -9,10 +9,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: node:15
+
+    strategy:
+      matrix:
+        node-version: [15.x]
+
     steps:
       - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i -g yarn
       - run: yarn install
+      - run: git config --global user.email "you@example.com"
+      - run: git config --global user.name "Your Name"
       - run: yarn build
+      - run: npm link
       - run: yarn test

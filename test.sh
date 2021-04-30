@@ -30,6 +30,6 @@ for TESTDIR in $(ls -d test/??); do
   fi
 done
 echo "1..$N"
-rm -rf "$T"
+# rm -rf "$T"
 
 exit $F
