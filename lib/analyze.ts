@@ -26,7 +26,7 @@ export default async function analyze(existingStats: Stats, options: Options) {
   let days = eachDayOfInterval({
     start: new Date(options.start),
     end: new Date(options.end),
-  });
+  }).map((d) => new Date(d.toISOString().slice(0, 10))); // always use GMT
 
   const relevantExistingStats = existingStats.filter(({ date }) =>
     days.find((day) => isEqual(day, new Date(date)))
