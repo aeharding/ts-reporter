@@ -65,7 +65,6 @@ Add to `azure-pipelines.yml`:
 
 ```yml
 # [...]
-
 - job: ts_reporter
   container: node:15
   steps:

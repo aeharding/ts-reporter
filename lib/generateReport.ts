@@ -2,17 +2,18 @@ import path from "path";
 import * as fse from "fs-extra";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import Chart, { ChartConfiguration } from "chart.js";
-import { Options, Stats } from "lib";
+import { Options, Stat } from "./";
 
-const projectName = fse.readJSONSync("package.json")?.name || "My Project";
+const projectName: string = (() => {
+  if (!fse.existsSync("package.json")) return "My Project";
+
+  return fse.readJSONSync("package.json")?.name || "My Project";
+})();
 
 const width = 1200;
 const height = 800;
 
-export default async function generateReport(
-  statsPerDay: Stats,
-  options: Options
-) {
+export async function generateReport(statsPerDay: Stat[], options: Options) {
   const chartConfig: ChartConfiguration = {
     plugins: [
       {

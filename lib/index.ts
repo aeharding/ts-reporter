@@ -1,10 +1,14 @@
 import path from "path";
 import * as fse from "fs-extra";
 import sloc from "sloc";
-import analyze from "./analyze";
-import generateReport from "./generateReport";
+import { analyze } from "./analyze";
+import { generateReport } from "./generateReport";
 import * as cache from "./cache";
+import { InterruptError, UncleanGitWorkingTreeError } from "./errors";
+import chalk from "chalk";
 
+export * from "./errors";
+export { generateReport, analyze };
 export interface Options {
   output: string;
   path: string;
@@ -14,16 +18,17 @@ export interface Options {
   dark?: boolean;
 }
 
-export type Stat = Record<sloc.Key, number>;
+export type SlocData = Record<sloc.Key, number>;
 
-export type StatItem = {
+export interface Stat {
   date: string;
-  stats: {
-    js: Stat;
-    ts: Stat;
-  };
-};
-export type Stats = StatItem[];
+  stats: Stats;
+}
+
+export interface Stats {
+  js: SlocData;
+  ts: SlocData;
+}
 
 export default async function run(options: Options) {
   const jsonPath = path.resolve(options.output, "data.json");
@@ -36,7 +41,19 @@ export default async function run(options: Options) {
     const statsPerDay = await analyze(existingStats, options);
     await generateReport(statsPerDay, options);
   } catch (e) {
-    if (e.message === "interrupt") return;
+    if (e instanceof UncleanGitWorkingTreeError) {
+      console.log(
+        chalk.red(
+          "Repo is not clean! Please cleanup your work before proceeding (`git status`)."
+        )
+      );
+      return;
+    }
+
+    // exit silently, just needed to wait for things to cleanup
+    if (e instanceof InterruptError) return;
+
+    // unknown error
     throw e;
   }
 }

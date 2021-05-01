@@ -5,10 +5,12 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
+    "baseUrl": "lib",
+    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "declaration": true,
     "outDir": "./dist",
     "lib": ["ES2015", "DOM"]
   },
