@@ -13,6 +13,8 @@ run(async () => {
 
   delete result.path;
   delete expected.path;
+  delete result.version;
+  delete expected.version;
 
   assert.deepStrictEqual(result, expected);
 
