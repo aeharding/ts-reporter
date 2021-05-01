@@ -1,13 +1,13 @@
 import execa from "execa";
 import glob from "glob-promise";
-import chalk from "chalk";
 import { eachDayOfInterval, format, isEqual, parse } from "date-fns";
 import * as fs from "fs/promises";
 import sloc from "sloc";
 import * as git from "./git";
-import { Options, Stat, StatItem, Stats } from "lib";
+import { Options, SlocData, Stat, Stats } from "./";
 import path from "path";
 import * as cache from "./cache";
+import { UncleanGitWorkingTreeError, InterruptError } from "./errors";
 
 let currentGitRef: string | undefined;
 let interrupt = false;
@@ -22,7 +22,17 @@ process.on("SIGINT", async () => {
   process.exit();
 });
 
-export default async function analyze(existingStats: Stats, options: Options) {
+/**
+ *
+ * @param existingStats Cached stats. If passed [], will run clean.
+ * @param options CLI options
+ * @returns Stats of project
+ * @throws UncleanGitWorkingTreeError
+ */
+export async function analyze(
+  existingStats: Stat[],
+  options: Options
+): Promise<Stat[]> {
   let days = eachDayOfInterval({
     start: parse(options.start, "yyyy-LL-dd", new Date()),
     end: parse(options.end, "yyyy-LL-dd", new Date()),
@@ -39,41 +49,27 @@ export default async function analyze(existingStats: Stats, options: Options) {
 
   if (days.length > 0) {
     if (!(await git.isClean())) {
-      console.log(
-        chalk.red(
-          "Repo is not clean! Please cleanup your work before proceeding (`git status`)."
-        )
-      );
-
-      process.exit(1);
+      throw new UncleanGitWorkingTreeError();
     }
     currentGitRef = await git.getRef();
   }
 
   const currentCommit = await git.getHEADSha();
 
-  let statsPerDay: Stats = [];
+  let statsPerDay: Stat[] = [];
   for (let i = 0; i < days.length; i++) {
-    if (interrupt) throw new Error("interrupt");
+    if (interrupt) throw new InterruptError();
 
     const date = days[i];
 
-    let stats: { js: Stat; ts: Stat };
-
-    try {
-      stats = await getStatsPerDay(date, currentCommit, options);
-    } catch (e) {
-      if (e.message !== "not found") throw e;
-
-      stats = {
-        js: emptyStat(),
-        ts: emptyStat(),
-      };
-    }
+    const stats = await getStatsPerDay(date, currentCommit, options);
 
     statsPerDay.push({
       date: date.toISOString(),
-      stats,
+      stats: stats || {
+        js: emptyStat(),
+        ts: emptyStat(),
+      },
     });
   }
 
@@ -87,7 +83,7 @@ export default async function analyze(existingStats: Stats, options: Options) {
   return statsPerDay;
 }
 
-export function sortStats(a: StatItem, b: StatItem): number {
+export function sortStats(a: Stat, b: Stat): number {
   return new Date(a.date).getTime() - new Date(b.date).getTime();
 }
 
@@ -95,7 +91,7 @@ async function getStatsPerDay(
   day: Date,
   currentCommit: string,
   options: Options
-) {
+): Promise<Stats | undefined> {
   console.log("Running for date:", day);
 
   const { stdout: revision } = await execa("git", [
@@ -106,7 +102,7 @@ async function getStatsPerDay(
     currentCommit,
   ]);
 
-  if (!revision) throw new Error("not found");
+  if (!revision) return;
 
   await git.checkout(revision);
 
@@ -119,7 +115,10 @@ async function getStatsPerDay(
   };
 }
 
-async function getStatsFor(type: "js" | "ts", options: Options): Promise<Stat> {
+async function getStatsFor(
+  type: "js" | "ts",
+  options: Options
+): Promise<SlocData> {
   const files = await glob(
     path.resolve(options.path, "**", `*.{${type},${type}x}`),
     {
@@ -144,7 +143,7 @@ async function getStatsFor(type: "js" | "ts", options: Options): Promise<Stat> {
   return stats;
 }
 
-function emptyStat(): Stat {
+function emptyStat(): SlocData {
   return {
     total: 0,
     source: 0,

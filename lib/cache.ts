@@ -1,6 +1,6 @@
 import pathFs from "path";
 import * as fse from "fs-extra";
-import { Options, Stats } from "lib";
+import { Options, Stat } from "./";
 import { uniqBy } from "lodash";
 import { sortStats } from "./analyze";
 
@@ -11,12 +11,12 @@ const VERSION: string = fse.readJSONSync(
 let cachedFileCache: FileCache | undefined;
 
 interface FileCache {
-  data: Stats;
+  data: Stat[];
   path: string;
   version: string;
 }
 
-export async function readData(options: Options): Promise<Stats> {
+export async function readData(options: Options): Promise<Stat[]> {
   const outputPath = getOutputPath(options);
   if (!(await fse.pathExists(outputPath))) return [];
 
@@ -25,7 +25,7 @@ export async function readData(options: Options): Promise<Stats> {
   return fileCache.data;
 }
 
-export async function writeData(data: Stats, options: Options): Promise<void> {
+export async function writeData(data: Stat[], options: Options): Promise<void> {
   const outputPath = getOutputPath(options);
 
   const allData = uniqBy(
@@ -57,7 +57,7 @@ async function read(options: Options): Promise<FileCache | null> {
   return result;
 }
 
-function create(path: string, data: Stats = []): FileCache {
+function create(path: string, data: Stat[] = []): FileCache {
   return {
     data,
     path: pathFs.resolve(path),
