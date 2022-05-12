@@ -16,6 +16,7 @@ export interface Options {
   end: string;
   clean?: boolean;
   dark?: boolean;
+  ignore?: string[];
 }
 
 export type SlocData = Record<sloc.Key, number>;

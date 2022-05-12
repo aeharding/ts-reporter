@@ -122,7 +122,10 @@ async function getStatsFor(
   const files = await glob(
     path.resolve(options.path, "**", `*.{${type},${type}x}`),
     {
-      ignore: "**/node_modules/**",
+      ignore: [
+        "**/node_modules/**",
+        ...(options.ignore?.map((p) => path.resolve(p)) || []),
+      ],
     }
   );
   const fileContents = await Promise.all(files.map((f) => fs.readFile(f)));

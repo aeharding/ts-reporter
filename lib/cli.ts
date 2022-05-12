@@ -34,6 +34,12 @@ yargs(hideBin(process.argv))
     description: "First day (start bound) of analysis",
     default: subDays(new Date(), 90).toISOString().slice(0, 10),
   })
+  .option("ignore", {
+    alias: "i",
+    type: "array",
+    description: "Ignore certain paths",
+    default: [],
+  })
   .alias("start", "from")
   .option("end", {
     alias: "e",
