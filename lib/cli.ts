@@ -4,7 +4,7 @@ import { subDays } from "date-fns";
 import path from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import run from "./";
+import run from "./index.js";
 
 yargs(hideBin(process.argv))
   .option("verbose", {

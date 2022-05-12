@@ -1,13 +1,13 @@
-import execa from "execa";
+import { execa } from "execa";
 import glob from "glob-promise";
 import { eachDayOfInterval, format, isEqual, parse } from "date-fns";
 import * as fs from "fs/promises";
 import sloc from "sloc";
-import * as git from "./git";
-import { Options, SlocData, Stat, Stats } from "./";
+import * as git from "./git.js";
+import { Options, SlocData, Stat, Stats } from "./index.js";
 import path from "path";
-import * as cache from "./cache";
-import { UncleanGitWorkingTreeError, InterruptError } from "./errors";
+import * as cache from "./cache.js";
+import { UncleanGitWorkingTreeError, InterruptError } from "./errors.js";
 
 let currentGitRef: string | undefined;
 let interrupt = false;

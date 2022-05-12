@@ -1,8 +1,12 @@
 import pathFs from "path";
-import * as fse from "fs-extra";
-import { Options, Stat } from "./";
-import { uniqBy } from "lodash";
-import { sortStats } from "./analyze";
+import fse from "fs-extra";
+import { Options, Stat } from "./index.js";
+import uniqBy from "lodash/uniqBy.js";
+import { sortStats } from "./analyze.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const VERSION: string = fse.readJSONSync(
   pathFs.resolve(__dirname, "../package.json")

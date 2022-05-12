@@ -1,7 +1,10 @@
 import assert from "assert";
-import * as fse from "fs-extra";
-import { run } from "../utils/misc";
+import fse from "fs-extra";
+import { run } from "../utils/misc.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIR = process.argv[2];
 
 run(async () => {

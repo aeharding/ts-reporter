@@ -2,7 +2,7 @@ export async function run(test: () => Promise<void>) {
   try {
     await test();
     //process.exit(0);
-  } catch (err) {
+  } catch (err: any) {
     console.log("  ---");
     console.log(`  message: ${err.message}`);
     console.log(`  actual: ${JSON.stringify(err.actual)}`);

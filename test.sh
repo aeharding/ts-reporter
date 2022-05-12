@@ -21,7 +21,7 @@ for TESTDIR in $(ls -d test/??); do
   cd $DIR
   ../../../"$TESTDIR"/setup.sh "$DIR"
   cd $OLDPWD
-  npx ts-node "$FILE" "$DIR"
+  node --loader ts-node/esm "$FILE" "$DIR"
   if [ $? = 0 ]; then
     echo "ok $N $FILE"
   else
