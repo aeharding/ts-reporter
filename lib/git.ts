@@ -1,4 +1,4 @@
-import execa from "execa";
+import { execa } from "execa";
 
 export async function getRef() {
   const { stdout: ref } = await execa("git", [

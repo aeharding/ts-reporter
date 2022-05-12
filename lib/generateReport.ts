@@ -1,8 +1,10 @@
 import path from "path";
-import * as fse from "fs-extra";
+import fse from "fs-extra";
 import { ChartJSNodeCanvas } from "chartjs-node-canvas";
 import Chart, { ChartConfiguration } from "chart.js";
-import { Options, Stat } from "./";
+import { Options, Stat } from "./index.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const projectName: string = (() => {
   if (!fse.existsSync("package.json")) return "My Project";
@@ -12,6 +14,8 @@ const projectName: string = (() => {
 
 const width = 1200;
 const height = 800;
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export async function generateReport(statsPerDay: Stat[], options: Options) {
   const chartConfig: ChartConfiguration = {

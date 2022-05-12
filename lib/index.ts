@@ -1,14 +1,15 @@
 import path from "path";
-import * as fse from "fs-extra";
+import fse from "fs-extra";
 import sloc from "sloc";
-import { analyze } from "./analyze";
-import { generateReport } from "./generateReport";
-import * as cache from "./cache";
-import { InterruptError, UncleanGitWorkingTreeError } from "./errors";
+import { analyze } from "./analyze.js";
+import { generateReport } from "./generateReport.js";
+import * as cache from "./cache.js";
+import { InterruptError, UncleanGitWorkingTreeError } from "./errors.js";
 import chalk from "chalk";
 
-export * from "./errors";
+export * from "./errors.js";
 export { generateReport, analyze };
+
 export interface Options {
   output: string;
   path: string;
@@ -16,6 +17,7 @@ export interface Options {
   end: string;
   clean?: boolean;
   dark?: boolean;
+  ignore?: string[];
 }
 
 export type SlocData = Record<sloc.Key, number>;

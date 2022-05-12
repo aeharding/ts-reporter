@@ -4,7 +4,7 @@ import { subDays } from "date-fns";
 import path from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import run from "./";
+import run from "./index.js";
 
 yargs(hideBin(process.argv))
   .option("verbose", {
@@ -33,6 +33,12 @@ yargs(hideBin(process.argv))
     type: "string",
     description: "First day (start bound) of analysis",
     default: subDays(new Date(), 90).toISOString().slice(0, 10),
+  })
+  .option("ignore", {
+    alias: "i",
+    type: "array",
+    description: "Ignore certain paths",
+    default: [],
   })
   .alias("start", "from")
   .option("end", {
